@@ -5,7 +5,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
-import android.view.Gravity
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.LinearLayout
@@ -23,7 +22,6 @@ class MainActivity : Activity() {
     private lateinit var endPicker: TimePicker
 
     private val selected = mutableSetOf<String>()
-    private val names = mutableMapOf<String, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +52,7 @@ class MainActivity : Activity() {
             }
         )
 
-        // Start time
+        // Focus start
         root.addView(
             TextView(this).apply {
                 text = "Focus starts"
@@ -70,7 +68,7 @@ class MainActivity : Activity() {
 
         root.addView(startPicker)
 
-        // End time
+        // Focus end
         root.addView(
             TextView(this).apply {
                 text = "Focus ends"
@@ -86,10 +84,10 @@ class MainActivity : Activity() {
 
         root.addView(endPicker)
 
-        // Choose apps button
+        // Choose apps
         root.addView(
             Button(this).apply {
-                text = "Choose blocked apps"
+                text = "Choose apps"
 
                 setOnClickListener {
                     showAppPicker()
@@ -97,7 +95,7 @@ class MainActivity : Activity() {
             }
         )
 
-        // Save schedule button
+        // Save schedule
         root.addView(
             Button(this).apply {
                 text = "Save schedule"
@@ -114,32 +112,17 @@ class MainActivity : Activity() {
 
                     AlertDialog.Builder(this@MainActivity)
                         .setTitle("StudyLock")
-                        .setMessage(
-                            "Schedule saved. The blocker operates while Accessibility is enabled."
-                        )
+                        .setMessage("Your focus schedule has been saved.")
                         .setPositiveButton("OK", null)
                         .show()
                 }
             }
         )
 
-        // Overlay permission
+        // Accessibility settings
         root.addView(
             Button(this).apply {
-                text = "Enable overlay permission"
-
-                setOnClickListener {
-                    this@MainActivity.startActivity(
-                        Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
-                    )
-                }
-            }
-        )
-
-        // Accessibility permission
-        root.addView(
-            Button(this).apply {
-                text = "Enable Accessibility blocker"
+                text = "Accessibility settings"
 
                 setOnClickListener {
                     this@MainActivity.startActivity(
@@ -149,22 +132,25 @@ class MainActivity : Activity() {
             }
         )
 
-        // Information
+        // About StudyLock
         root.addView(
             TextView(this).apply {
                 text = """
 
-                    About StudyLock
+                About StudyLock
 
-                    This prototype is transparent and can be disabled in Android Settings.
-                    It is not tamper-proof.
-                """.trimIndent()
+                StudyLock helps you follow your chosen study schedule.
+                Accessibility must be enabled manually in Android Settings.
+                You can disable it through Android Settings at any time.
+
+            """.trimIndent()
 
                 textSize = 14f
                 setPadding(0, 18, 0, 0)
             }
         )
 
+        // Scrollable layout
         val scrollView = ScrollView(this).apply {
             addView(root)
         }
@@ -195,8 +181,6 @@ class MainActivity : Activity() {
 
                 val label = ri.loadLabel(pm).toString()
 
-                names[pkg] = label
-
                 pkg to label
             }
             .distinctBy { it.first }
@@ -219,7 +203,6 @@ class MainActivity : Activity() {
                     isChecked = selected.contains(pkg)
 
                     setOnCheckedChangeListener { _, checked ->
-
                         if (checked) {
                             selected.add(pkg)
                         } else {
@@ -231,7 +214,7 @@ class MainActivity : Activity() {
         }
 
         AlertDialog.Builder(this)
-            .setTitle("Apps to block")
+            .setTitle("Choose apps")
             .setView(scroll)
             .setPositiveButton("Done", null)
             .setNegativeButton("Cancel", null)
