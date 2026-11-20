@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="accessibility_service_description">Detects the foreground app to apply your scheduled focus block.</string>
+
+    <string name="app_name">StudyLock</string>
+
+    <string name="accessibility_service_description">
+        StudyLock detects which app is in the foreground to apply your scheduled focus sessions.
+        It does not read screen content, messages, or typed text.
+    </string>
+
 </resources>
