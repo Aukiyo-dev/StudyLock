@@ -37,27 +37,25 @@ class FocusBarrierService : AccessibilityService() {
     }
 
     private fun inScheduleNow(): Boolean {
-        val now = Calendar.getInstance()
+    val now = Calendar.getInstance()
 
-        val current =
-            now.get(Calendar.HOUR_OF_DAY) * 60 +
-            now.get(Calendar.MINUTE)
+    val current =
+        now.get(Calendar.HOUR_OF_DAY) * 60 +
+        now.get(Calendar.MINUTE)
 
-        val start =
-            prefs.getInt("startHour", 14) * 60 +
-            prefs.getInt("startMinute", 0)
+    val start =
+        prefs.getInt("startHour", 14) * 60 +
+        prefs.getInt("startMinute", 0)
 
-        val end =
-            prefs.getInt("endHour", 16) * 60 +
-            prefs.getInt("endMinute", 0)
+    val end =
+        prefs.getInt("endHour", 16) * 60 +
+        prefs.getInt("endMinute", 0)
 
-        return if (start < end) {
-            current in start until end
-        } else if (start > end) {
-            current >= start || current < end
-        } else {
-            false
-        }
+    return FocusSchedule.isWithinSchedule(
+        currentMinutes = current,
+        startMinutes = start,
+        endMinutes = end
+    )
     }
 
     private fun updateBarrier(pkg: String) {
