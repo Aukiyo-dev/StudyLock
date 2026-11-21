@@ -41,6 +41,9 @@ jobs:
 
           "$CMDLINE" "platforms;android-35"
           "$CMDLINE" "build-tools;35.0.0"
+          
+      - name: Run schedule unit tests
+        run: gradle testDebugUnitTest
 
       - name: Build Debug APK
         run: gradle assembleDebug
